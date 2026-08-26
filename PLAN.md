@@ -20,14 +20,14 @@ tests.
   - JSON-RPC 2.0 message types and error codes (ports `jsonrpc.py`)
   - Errors: `ClientError`, `ValidationErrors`, `CallTimeoutError`, errno
     constants 201-210 (ports `exc.py`)
-- [ ] **2. Core client**
+- [x] **2. Core client**
   - websocket transport: unix socket (`ws+unix://`), `ws://`/`wss://`,
     reserved ports (600-1024, ws:// only), `verify_ssl` toggle, TCP keepalive
     (ports `WSClient`)
   - call/response correlation by uuid, `core.set_options` handshake
     (`legacy_jobs: false`), call timeout, connection-closed error broadcast
     (ports `JSONRPCClient` call path)
-- [ ] **3. Jobs + subscriptions**
+- [x] **3. Jobs + subscriptions**
   - `core.get_jobs` subscription, new-style jobs (result delivered via
     collection_update `message_ids`), `Job` wait/result, validation/exc_info
     error mapping
