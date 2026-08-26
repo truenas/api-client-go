@@ -33,7 +33,7 @@ tests.
     error mapping
   - `Subscribe`/`Unsubscribe`, `collection_update` + `notify_unsubscribed`
     dispatch, sync vs async callbacks
-- [ ] **4. Auth**
+- [x] **4. Auth**
   - `LoginWithPassword` (`auth.login_ex` PASSWORD_PLAIN, OTP continue, legacy
     `auth.login` fallback) (ports `login_with_password`)
   - API key: key-material parsing (raw `<id>-<key>`, JSON, INI file),
