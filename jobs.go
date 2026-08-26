@@ -68,11 +68,17 @@ func (j *Job) ID() int64 {
 
 // OnUpdate registers cb to be called (in its own goroutine) with the job's
 // state every time an update is received. Call it before Result to observe
-// progress.
+// progress. If updates already arrived before registration, cb is immediately
+// called once with the latest state.
 func (j *Job) OnUpdate(cb JobCallback) {
 	j.state.mu.Lock()
 	j.state.callback = cb
+	replay := j.state.haveInfo
+	fields := j.state.fields
 	j.state.mu.Unlock()
+	if replay {
+		go cb(&fields)
+	}
 }
 
 // Result waits for the job to finish and returns its result decoded via

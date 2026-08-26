@@ -40,7 +40,7 @@ tests.
     PLAIN (`API_KEY_PLAIN`), SCRAM-SHA-512 with RFC 5929
     tls-server-end-point channel binding (ports `auth_api_key.py`,
     `scram_impl.py`, client-side subset of `py_scram/`)
-- [ ] **5. CLI `midclt`** (`cmd/midclt`)
+- [x] **5. CLI `midclt`** (`cmd/midclt`)
   - call / ping / subscribe subcommands, job progress (progressbar or
     description), stdin `-` payload, `--insecure`, `--plain`,
     `--no-channel-binding`
