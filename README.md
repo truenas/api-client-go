@@ -68,6 +68,29 @@ $ midclt call -j pool.import_on_boot
 $ midclt subscribe -n 1 core.get_jobs
 ```
 
+## Testing
+
+Unit tests run against an in-process fake middleware server:
+
+```console
+$ go test -race ./...
+```
+
+Smoke tests exercise the client against a real TrueNAS machine. They are
+excluded from normal runs by the `smoke` build tag and configured via
+`TRUENAS_SMOKE_*` environment variables (see `smoke_test.go` for the full
+list). All are read-only except the opt-in job test:
+
+```console
+$ TRUENAS_SMOKE_URI=wss://nas.example/api/current \
+  TRUENAS_SMOKE_USERNAME=admin \
+  TRUENAS_SMOKE_API_KEY=1-abcd... \
+  go test -tags smoke -v -run Smoke .
+```
+
+They can also be launched from GitHub Actions ("Smoke tests" workflow,
+manual trigger) using repository secrets for the target and credentials.
+
 ## License
 
 LGPL-3.0-or-later, same as the Python client.

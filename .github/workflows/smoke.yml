@@ -1,0 +1,58 @@
+name: Smoke tests
+
+# Runs the smoke test suite against a real TrueNAS machine. Triggered
+# manually; the target and credentials come from repository secrets (a
+# workflow input can override the URI). The runner must be able to reach the
+# target machine, which for a lab box usually means a self-hosted runner.
+#
+# Required secrets:
+#   TRUENAS_SMOKE_URI       e.g. wss://nas.example/api/current
+#   TRUENAS_SMOKE_USERNAME
+#   TRUENAS_SMOKE_API_KEY   (or TRUENAS_SMOKE_PASSWORD)
+
+on:
+  workflow_dispatch:
+    inputs:
+      uri:
+        description: "Websocket URI (overrides the TRUENAS_SMOKE_URI secret)"
+        required: false
+        type: string
+      insecure:
+        description: "Disable SSL certificate verification"
+        required: false
+        type: boolean
+        default: false
+      run_job_test:
+        description: "Also run the core.job_test job smoke test"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      - name: Run smoke tests
+        env:
+          TRUENAS_SMOKE_URI: ${{ inputs.uri || secrets.TRUENAS_SMOKE_URI }}
+          TRUENAS_SMOKE_USERNAME: ${{ secrets.TRUENAS_SMOKE_USERNAME }}
+          TRUENAS_SMOKE_PASSWORD: ${{ secrets.TRUENAS_SMOKE_PASSWORD }}
+          TRUENAS_SMOKE_API_KEY: ${{ secrets.TRUENAS_SMOKE_API_KEY }}
+          TRUENAS_SMOKE_INSECURE: ${{ inputs.insecure && '1' || '' }}
+          TRUENAS_SMOKE_JOB: ${{ inputs.run_job_test && '1' || '' }}
+        run: |
+          if [ -z "$TRUENAS_SMOKE_URI" ]; then
+            echo "No target: set the TRUENAS_SMOKE_URI secret or pass the uri input." >&2
+            exit 1
+          fi
+          go test -tags smoke -v -run Smoke -count=1 .
