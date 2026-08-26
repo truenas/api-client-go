@@ -302,7 +302,7 @@ func TestCallJobProgressCallback(t *testing.T) {
 		"test.job": func(s *serverConn, id string, params []any) {
 			for i, state := range []string{"RUNNING", "SUCCESS"} {
 				s.notify("collection_update", map[string]any{
-					"msg": map[bool]string{true: "added", false: "changed"}[i == 0],
+					"msg":        map[bool]string{true: "added", false: "changed"}[i == 0],
 					"collection": "core.get_jobs", "id": 7,
 					"fields": map[string]any{
 						"id": 7, "state": state, "result": nil,
@@ -370,9 +370,9 @@ func TestJobFailureWithTrace(t *testing.T) {
 				"msg": "changed", "collection": "core.get_jobs", "id": 9,
 				"fields": map[string]any{
 					"id": 9, "state": "FAILED", "error": "boom",
-					"exception": "Traceback (most recent call last):\nCallError: boom",
-					"exc_info":  map[string]any{"type": "CallError", "extra": nil},
-					"progress":  map[string]any{"percent": 0, "description": ""},
+					"exception":   "Traceback (most recent call last):\nCallError: boom",
+					"exc_info":    map[string]any{"type": "CallError", "extra": nil},
+					"progress":    map[string]any{"percent": 0, "description": ""},
 					"message_ids": []string{id},
 				},
 			})

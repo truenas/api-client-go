@@ -184,10 +184,10 @@ func TestParseServerFirstValidation(t *testing.T) {
 		"",
 		"r=abc",
 		fmt.Sprintf("r=%s,s=%s,i=notanumber", nonce, salt),
-		fmt.Sprintf("r=%s,s=%s,i=100", nonce, salt),      // iterations below minimum
-		fmt.Sprintf("r=%s,s=%s,i=99999999", nonce, salt), // iterations above maximum
+		fmt.Sprintf("r=%s,s=%s,i=100", nonce, salt),                                                // iterations below minimum
+		fmt.Sprintf("r=%s,s=%s,i=99999999", nonce, salt),                                           // iterations above maximum
 		fmt.Sprintf("r=%s,s=%s,i=50000", base64.StdEncoding.EncodeToString([]byte("short")), salt), // bad nonce size
-		fmt.Sprintf("r=%s,s=%s,x=50000", nonce, salt), // unknown key
+		fmt.Sprintf("r=%s,s=%s,x=50000", nonce, salt),                                              // unknown key
 	} {
 		if _, err := ParseServerFirst(bad); err == nil {
 			t.Errorf("ParseServerFirst(%q): expected error", bad)
